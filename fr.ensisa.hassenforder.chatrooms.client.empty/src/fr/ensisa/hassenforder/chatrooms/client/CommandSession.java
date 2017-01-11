@@ -2,6 +2,7 @@ package fr.ensisa.hassenforder.chatrooms.client;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ensisa.hassenforder.chatrooms.client.model.Channel;
@@ -39,7 +40,14 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			return false;
+			w.createDisconnect(name);
+			w.send();
+			r.receive();
+			if (r.getType()==Protocol.OK){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (IOException e) {
 			return false;
 		}
@@ -66,8 +74,14 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			
-			return false;
+			w.createChannelCreation(name,channel,type);
+			w.send();
+			r.receive();
+			if(r.getType()==Protocol.OK){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (IOException e) {
 			return false;
 		}
@@ -77,7 +91,16 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			return null;
+			w.createLoadAllChannel(name);
+			w.send();
+			r.receive();
+			if(r.getType()==Protocol.RP_LOADROOMSOK){
+				
+				return r.getAllChannel();
+				
+			}else{
+				return null;
+			}
 		} catch (IOException e) {
 			return null;
 		}
@@ -87,7 +110,14 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			return false;
+			w.createChannelSubscriptionChange(name,description,selected);
+			w.send();
+			r.receive();
+			if(r.getType()==Protocol.OK){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (IOException e) {
 			return false;
 		}
@@ -97,7 +127,14 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			return false;
+			w.createModerationState(name,message,approved);
+			w.send();
+			r.receive();
+			if(r.getType()==Protocol.OK){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (IOException e) {
 			return false;
 		}
@@ -107,7 +144,14 @@ public class CommandSession {
 		try {
 			CommandWriter w = new CommandWriter(connection.getOutputStream());
 			CommandReader r = new CommandReader(connection.getInputStream());
-			return false;
+			w.createMessage(name,channelName,text);
+			w.send();
+			r.receive();
+			if(r.getType()==Protocol.OK){
+				return true;
+			}else{
+				return false;
+			}
 		} catch (IOException e) {
 			return false;
 		}
