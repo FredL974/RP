@@ -2,7 +2,6 @@ package fr.ensisa.hassenforder.chatrooms.client;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.ensisa.hassenforder.chatrooms.client.model.Channel;
