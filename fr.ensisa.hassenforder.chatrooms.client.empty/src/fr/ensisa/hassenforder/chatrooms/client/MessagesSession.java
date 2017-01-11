@@ -43,7 +43,6 @@ public class MessagesSession extends Thread {
 		try {
 			MessagesReader r = new MessagesReader (connection.getInputStream());
 			r.receive ();
-			
 			/*
 			 * TODO : a giant switch case to manage the request/reply
 			 */
