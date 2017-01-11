@@ -10,4 +10,9 @@ public class CommandWriter extends BasicAbstractWriter {
 		super (outputStream);
 	}
 
+	public void sendOperationStatus(OperationStatus operationStatus) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
