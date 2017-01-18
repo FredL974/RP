@@ -30,5 +30,9 @@ public interface Protocol {
 	public static final int RP_ERROR_STRINGFORBIDDEN = 201;
 	public static final int RP_ERROR_MEMORYSPACE = 202;
 	public static final int RP_ERROR_CONNECTION = 203;
+	
+	public static final int RQ_CONNECTMESSAGEUSER = 107;
+	public static final int INCOMMING_MESSAGE = 300;
+	public static final int PENDING_MESSAGE = 301;
 			
 }

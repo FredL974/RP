@@ -69,8 +69,4 @@ public class CommandWriter extends BasicAbstractWriter {
 		writeString(text);
 		
 	}
-
-	
-	
-
 }

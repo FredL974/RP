@@ -47,6 +47,12 @@ public class MessagesSession extends Thread {
 			 * TODO : a giant switch case to manage the request/reply
 			 */
 			switch (r.getType()) {
+			case Protocol.INCOMMING_MESSAGE:
+				listener.notifyIncomingMessages(r.getMessages());
+				break;
+			case Protocol.PENDING_MESSAGE:
+				listener.notifyIncomingModerations(r.getMessages());
+				break;
 			}
 		}
 		catch (IOException e) {

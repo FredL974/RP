@@ -2,13 +2,20 @@ package fr.ensisa.hassenforder.chatrooms.server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.rmi.server.Operation;
+import java.util.ArrayList;
+import java.util.List;
 
+import fr.ensisa.hassenforder.chatrooms.server.model.Channel;
 import fr.ensisa.hassenforder.network.Protocol;
 
 public class CommandSession extends Thread {
 
 	private Socket connection;
 	private NetworkListener listener;
+	
+	private String userName;
+	private MessagesSession ms;
 	
 	public CommandSession(Socket connection, NetworkListener listener) {
 		this.connection = connection;
@@ -33,9 +40,46 @@ public class CommandSession extends Thread {
 			reader.receive ();
 			switch (reader.getType ()) {
 			case Protocol.RQ_CONNECT:
-				if (listener.connectCommandUser(reader.getName(), this)==OperationStatus.NOW_CONNECTED)
+				if (listener.connectCommandUser(reader.getName(), this) == OperationStatus.NOW_CONNECTED)
 					writer.writeOK();
 				else writer.writeKO();
+				break;
+			case Protocol.RQ_DISCONNECT:
+				if (listener.disconnectUser(reader.getName()) == OperationStatus.NOW_DISCONNECTED)
+					writer.writeOK();
+				else writer.writeKO();
+				break;
+			case Protocol.RQ_CREATEROOM:
+				if (listener.createChannel(reader.getName(), reader.getChannel(), reader.getChannelType()) == OperationStatus.CHANNEL_CREATED){
+					writer.writeOK();
+					//channels.add(new Channel());
+				}				
+				else writer.writeKO();
+				break;
+			case Protocol.RQ_LOADROOMS:
+				// TODO
+				userName = reader.getName(); 
+				writer.loadChannel(userName, listener.loadChannels(userName));
+				break;
+			case Protocol.RQ_CHANNELSUBSCRIPTIONCHANGE:
+				if (listener.ChangeChannelSubscription(reader.getName(), reader.getChannel(), reader.getSubscription()) == OperationStatus.SUBSCRIPTION_CHANGED)
+					writer.writeOK();
+				else writer.writeKO();
+				break;
+			case Protocol.RQ_SETAPPROBATION:
+				if (listener.SetApprobation(reader.getName(), reader.getMessageId(), reader.getApproved()) == OperationStatus.APPROBATION_CHANGED)
+					writer.writeOK();
+				else writer.writeKO();
+				break;
+			case Protocol.RQ_POSTMESSAGE:
+				if (listener.sendMessage(reader.getName(), reader.getChannel(), reader.getText()) == OperationStatus.MESSAGE_SENT)
+					// TODO
+					writer.writeOK();
+				else writer.writeKO();
+				break;
+			case Protocol.RQ_CONNECTMESSAGEUSER:
+				userName = reader.getName();
+				ms = reader.getMessagesSession();
 				break;
 			case 0 : return false; // socket closed
 			case -1 : break;
@@ -56,7 +100,7 @@ public class CommandSession extends Thread {
 		try {
 			if (connection != null) connection.close();
 		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-
 }

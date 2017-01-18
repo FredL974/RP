@@ -10,7 +10,7 @@ import fr.ensisa.hassenforder.network.Protocol;
 
 public class CommandReader extends BasicAbstractReader {
 
-	private String userName, roomName, moderatorName, message, channel;
+	private String userName, roomName, moderatorName, message, channel, text;
 	private OperationStatus operationStatus;
 	private Application application;
 	private MessagesSession messagesSession;
@@ -37,7 +37,6 @@ public class CommandReader extends BasicAbstractReader {
 			this.userName = readString();
 			this.roomName = readString();
 			this.channelTypeNumber = readInt();
-
 			// TODO : 1 pour FREE, 2 pour MODERATED
 			switch (this.channelTypeNumber) {
 			case 1:
@@ -47,11 +46,8 @@ public class CommandReader extends BasicAbstractReader {
 				this.channelType = ChannelType.MODERATED;
 				break;
 			}
-
-			this.operationStatus = this.application.createChannel(this.userName, this.roomName, this.channelType);
-			this.w.sendOperationStatus(this.operationStatus);
 			break;
-		case Protocol.RQ_LOADROOMS :
+		/*case Protocol.RQ_LOADROOMS :
 			this.userName = readString();
 			List<Channel> channels = this.application.loadChannels(this.userName);
 			this.w.loadChannel(this.userName, channels);
@@ -69,12 +65,40 @@ public class CommandReader extends BasicAbstractReader {
 			this.approved = readBoolean();
 			this.operationStatus = this.application.SetApprobation(this.userName, this.messageId, this.approved);
 			this.w.sendOperationStatus(this.operationStatus);
-			break;
+			break;*/
 		}
 	}
 	
 	public String getName()
 	{
-		return userName;
+		return this.userName;
+	}
+
+	public String getChannel() {
+		return this.roomName;
+	}
+
+	public ChannelType getChannelType() {
+		return this.channelType;
+	}
+
+	public boolean getSubscription() {
+		return this.subscription;
+	}
+
+	public int getMessageId() {
+		return this.messageId;
+	}
+
+	public boolean getApproved() {
+		return this.approved;
+	}
+	
+	public MessagesSession getMessagesSession() {
+		return this.messagesSession;
+	}
+
+	public String getText() {
+		return text;
 	}
 }

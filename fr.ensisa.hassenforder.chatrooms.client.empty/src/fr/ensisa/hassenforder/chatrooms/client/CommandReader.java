@@ -17,6 +17,7 @@ public class CommandReader extends BasicAbstractReader {
 	public void receive() {
 		type = readInt ();
 		switch (type) {
+		case 0 : break;
 		}
 	}
 
@@ -37,5 +38,4 @@ public class CommandReader extends BasicAbstractReader {
 		}
 		return null;
 	}
-
 }
