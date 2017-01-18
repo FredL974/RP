@@ -112,6 +112,7 @@ public class Application implements NetworkListener {
 
 	@Override
 	public OperationStatus sendMessage(String name, String channel, String text) {
+		System.out.println(name + channel + text);
 		User user = model.getUser(name);
 		if (user == null) return OperationStatus.UNKNOWN_USER;
 		if (! user.isConnected()) return OperationStatus.NOT_CONNECTED;

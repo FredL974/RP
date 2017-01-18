@@ -9,67 +9,28 @@ import fr.ensisa.hassenforder.network.Protocol;
 
 public class CommandWriter extends BasicAbstractWriter {
 	
-	private OperationStatus operationStatus;
 	
 	public CommandWriter(OutputStream outputStream) {
 		super(outputStream);
 	}
 
-	public void sendOperationStatus(OperationStatus operationStatus) {
-		// TODO
-		switch (operationStatus) {
-		case ALLREADY_CONNECTED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			
-			// TODO : voir BasicAbstractWriter
-			writeString("test"); 
-			
-			break;
-		case APPROBATION_CHANGED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case CHANNEL_CREATED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case CHANNEL_CREATION_FAILED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case CHANNEL_EXISTS:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case MESSAGE_SENT:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case NOT_CONNECTED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case NOW_CONNECTED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case NOW_DISCONNECTED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case SUBSCRIPTION_CHANGED:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case UNKNOWN_CHANNEL:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case UNKNOWN_MESSAGE:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		case UNKNOWN_USER:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		default:
-			System.out.println("Serveur CommandWriter sendOperationStatus");
-			break;
-		}
-	}
-
 	public void loadChannel(String userName, List<Channel> channels) {
-		// TODO Auto-generated method stub
-		
+		writeInt(Protocol.RP_LOADROOMSOK);
+		writeInt(channels.size());
+		int type;
+		for (int i=0;i<channels.size();i++){
+			writeString(channels.get(i).getName());
+			type = channels.get(i).getType().ordinal();
+			writeInt(type);
+			switch (type) {
+			case 0:
+				break;
+			case 1:
+				writeString(channels.get(i).getModerator().getName());
+				break;
+			}
+			writeBoolean(channels.get(i).isSubscriptor(userName));
+		}
 	}
 
 	public void writeOK() {

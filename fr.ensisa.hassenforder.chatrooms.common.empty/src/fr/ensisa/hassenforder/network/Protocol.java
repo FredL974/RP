@@ -34,5 +34,6 @@ public interface Protocol {
 	public static final int RQ_CONNECTMESSAGEUSER = 107;
 	public static final int INCOMMING_MESSAGE = 300;
 	public static final int PENDING_MESSAGE = 301;
+	public static final int RP_CONNECTMESSAGE = 150;
 			
 }

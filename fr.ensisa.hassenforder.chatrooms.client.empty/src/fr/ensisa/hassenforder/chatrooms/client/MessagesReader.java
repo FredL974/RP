@@ -9,23 +9,30 @@ import fr.ensisa.hassenforder.network.BasicAbstractReader;
 
 public class MessagesReader extends BasicAbstractReader {
 
+	private List<Message> messages;
+	
 	public MessagesReader(InputStream inputStream) {
 		super (inputStream);
 	}
 
 	public void receive() {
 		type = readInt ();
-		switch (type) {
-		case 0: break;
+		messages = new ArrayList<Message>();
+		int length = readInt();
+		String channel;
+		int messageID;
+		String author;
+		String text;
+		for (int i = 0; i < length; i++) {
+			channel = readString();
+			messageID = readInt();
+			author = readString();
+			text = readString();
+			messages.add(new Message(channel, messageID, author, text));
 		}
 	}
 
 	public List<Message> getMessages() {
-		List<Message> messages = new ArrayList<Message>();
-		int length = readInt();
-		for (int i = 1; i < length; i++) {
-			messages.add(new Message(readString(), readInt(), readString(), readString()));
-		}
 		return messages;
 	}
 }

@@ -28,9 +28,9 @@ public class CommandWriter extends BasicAbstractWriter {
 
 	public void createChannelCreation(String name, String channel, ChannelType type) {
 		writeInt(Protocol.RQ_CREATEROOM);
+		writeString(name);
 		writeString(channel);
 		writeInt(type.ordinal());
-		writeString(name);
 	}
 
 	public void createLoadAllChannel(String name) {
@@ -50,16 +50,9 @@ public class CommandWriter extends BasicAbstractWriter {
 	public void createModerationState(String name, Message message, boolean approved) {
 		writeInt(Protocol.RQ_MODERATIONSTATE);
 		writeString(name);
-		writeMessage(message);
+		writeInt(message.getId());
 		writeBoolean(approved);
 		
-	}
-
-	private void writeMessage(Message message) {
-		writeString(message.getChannel());
-		writeInt(message.getId());
-		writeString(message.getAuthor());
-		writeString(message.getText());
 	}
 
 	public void createMessage(String name, String channelName, String text) {

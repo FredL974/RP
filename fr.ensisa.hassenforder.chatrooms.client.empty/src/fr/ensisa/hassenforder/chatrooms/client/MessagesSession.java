@@ -39,7 +39,7 @@ public class MessagesSession extends Thread {
 	}
 
 	public boolean operate() {
-		boolean ok = false;
+		boolean ok = true;
 		try {
 			MessagesReader r = new MessagesReader (connection.getInputStream());
 			r.receive ();
@@ -63,6 +63,7 @@ public class MessagesSession extends Thread {
 	public void run() {
 		try {
 			MessagesWriter w = new MessagesWriter (connection.getOutputStream());
+			w.connectMessage(name);
 			w.send();
 		}
 		catch (IOException e) {

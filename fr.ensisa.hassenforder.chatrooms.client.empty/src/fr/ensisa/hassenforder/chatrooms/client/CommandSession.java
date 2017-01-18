@@ -94,7 +94,6 @@ public class CommandSession {
 			w.send();
 			r.receive();
 			if(r.getType()==Protocol.RP_LOADROOMSOK){
-				
 				return r.getAllChannel();
 				
 			}else{

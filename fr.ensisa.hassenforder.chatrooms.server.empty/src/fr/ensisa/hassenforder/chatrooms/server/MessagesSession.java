@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.List;
 
 import fr.ensisa.hassenforder.chatrooms.server.model.Message;
+import fr.ensisa.hassenforder.network.Protocol;
 
 public class MessagesSession {
 
@@ -28,7 +29,15 @@ public class MessagesSession {
 
 	public boolean processConnection () {
 		try {
-			return false;
+			MessagesWriter writer = new MessagesWriter (connection.getOutputStream());
+			MessagesReader reader = new MessagesReader (connection.getInputStream());
+			reader.receive ();
+			switch (reader.getType ()) {
+			case Protocol.RP_CONNECTMESSAGE:
+				listener.connectMessagesUser(reader.getName(), this);
+				break;
+			}
+			return true;
 		}
 		catch (Exception e) {
 		}
@@ -37,6 +46,9 @@ public class MessagesSession {
 
 	public boolean dispatchIncomingMessages (List<Message> messages) {
 		try {
+			MessagesWriter writer = new MessagesWriter (connection.getOutputStream());
+			MessagesReader reader = new MessagesReader (connection.getInputStream());
+			writer.dispatchIncomingMessages(messages);
 			return true;
 		}
 		catch (Exception e) {
@@ -46,11 +58,13 @@ public class MessagesSession {
 
 	public boolean dispatchPendingMessages (List<Message> messages) {
 		try {
+			MessagesWriter writer = new MessagesWriter (connection.getOutputStream());
+			MessagesReader reader = new MessagesReader (connection.getInputStream());
+			writer.dispatchPendingMessages(messages);
 			return true;
 		}
 		catch (Exception e) {
 		}
 		return false;
 	}
-
 }

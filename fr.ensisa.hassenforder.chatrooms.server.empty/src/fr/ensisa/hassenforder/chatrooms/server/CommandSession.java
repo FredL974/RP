@@ -13,9 +13,7 @@ public class CommandSession extends Thread {
 
 	private Socket connection;
 	private NetworkListener listener;
-	
 	private String userName;
-	private MessagesSession ms;
 	
 	public CommandSession(Socket connection, NetworkListener listener) {
 		this.connection = connection;
@@ -52,12 +50,10 @@ public class CommandSession extends Thread {
 			case Protocol.RQ_CREATEROOM:
 				if (listener.createChannel(reader.getName(), reader.getChannel(), reader.getChannelType()) == OperationStatus.CHANNEL_CREATED){
 					writer.writeOK();
-					//channels.add(new Channel());
 				}				
 				else writer.writeKO();
 				break;
 			case Protocol.RQ_LOADROOMS:
-				// TODO
 				userName = reader.getName(); 
 				writer.loadChannel(userName, listener.loadChannels(userName));
 				break;
@@ -73,13 +69,8 @@ public class CommandSession extends Thread {
 				break;
 			case Protocol.RQ_POSTMESSAGE:
 				if (listener.sendMessage(reader.getName(), reader.getChannel(), reader.getText()) == OperationStatus.MESSAGE_SENT)
-					// TODO
 					writer.writeOK();
 				else writer.writeKO();
-				break;
-			case Protocol.RQ_CONNECTMESSAGEUSER:
-				userName = reader.getName();
-				ms = reader.getMessagesSession();
 				break;
 			case 0 : return false; // socket closed
 			case -1 : break;
